@@ -30,3 +30,15 @@ jobs:
         run: |
           source venv/bin/activate
           pytest
+
+      - name: Telegram notification
+        if: ${{ failure() }}
+        uses: appleboy/telegram-action@master
+        with:
+          token: ${{ secrets.BOT_TOKEN }}
+          to: ${{ secrets.CHAT_ID }}
+          message: |
+            Тесты провалены!
+            Репозиторий: ${{ github.repository }}
+            Ветка: ${{ github.ref }}
+            Ссылка на запуск: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
